@@ -1,0 +1,4 @@
+hello
+file open success
+My name is seunghun Lee nice to meet you.
+This Buffer Size is too long!!! if you want to exit this page then put these key :q
