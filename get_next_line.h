@@ -6,7 +6,7 @@
 /*   By: seunghun <seunghun@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 16:31:51 by seunghun          #+#    #+#             */
-/*   Updated: 2023/10/25 16:15:34 by seunghun         ###   ########.fr       */
+/*   Updated: 2023/10/26 16:32:53 by seunghun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ char		*get_next_line(int fd);
 size_t		ft_strlen(char const *str);
 char		*ft_strdup(char *src);
 char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif
