@@ -6,7 +6,7 @@
 /*   By: seunghun <seunghun@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 17:09:30 by seunghun          #+#    #+#             */
-/*   Updated: 2023/10/26 16:28:49 by seunghun         ###   ########.fr       */
+/*   Updated: 2023/10/28 15:27:53 by seunghun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,22 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		dest[i++] = s2[j++];
 	dest[i] = '\0';
 	return (dest);
+}
+
+char	*ft_strchr(const char *str, int c)
+{
+	char	chg_c;
+	int		i;
+
+	i = 0;
+	chg_c = (unsigned char)c;
+	while (str[i])
+	{
+		if (str[i] == chg_c)
+			return ((char *)&str[i]);
+		i++;
+	}
+	if (str[i] == chg_c)
+		return ((char *)&str[i]);
+	return (0);
 }
