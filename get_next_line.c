@@ -3,94 +3,92 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seunghun <seunghun@student.42.kr>          +#+  +:+       +#+        */
+/*   By: seunghun <seunghun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/19 16:28:42 by seunghun          #+#    #+#             */
-/*   Updated: 2023/10/26 17:47:40 by seunghun         ###   ########.fr       */
+/*   Created: 2023/10/30 13:34:44 by seunghun          #+#    #+#             */
+/*   Updated: 2023/11/15 16:48:33 by seunghun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static size_t	newline(char *str)
+static char	*ft_strchr(const char *str, int c)
 {
-	size_t	cnt;
-	size_t	i;
-
-	i = 0;
-	cnt = 0;
-	while (str && str[i])
-	{
-		if (str[i] == '\n')
-			return (cnt);
-		i++;
-		cnt++;
-	}
-	return (0);
-}
-
-static char	*chk_word(char *save, char *result)
-{
-	char	*save_line;
+	char	chg_c;
 	int		i;
 
 	i = 0;
-	while (save[i] != '\n' && save[i] != '\0')
-		i++;
-	if (save[i] == '\0')
-		return (0);
-	save_line = ft_substr(result, i + 1, ft_strlen(result) - i);
-	if (!save_line)
-		return (0);
-	if (save_line[0] == '\0')
+	chg_c = (unsigned char)c;
+	while (str[i])
 	{
-		free(save_line);
-		save_line = 0;
-		return (0);
+		if (str[i] == chg_c)
+			return ((char *)&str[i]);
+		i++;
 	}
-	result[i + 1] = '\0';
-	return (save_line);
+	if (str[i] == chg_c)
+		return ((char *)&str[i]);
+	return (0);
 }
 
-static char	*save_words(int fd, char *buffer, char *save)
+static char	*save_word(int fd, int read_size, char *buffer, char **save)
 {
-	int		read_size;
 	char	*temp;
 
-	while (buffer[newline(buffer)])
+	while (read_size > 0)
 	{
 		read_size = read(fd, buffer, BUFFER_SIZE);
-		if (read_size == 0)
-			return (save);
-		else if (read_size == -1)
+		if (read_size == -1)
+			return (free_str(save));
+		else if (read_size == 0)
+			break ;
+		if (!(*save))
+			*save = ft_strdup("", save);
+		temp = *save;
+		buffer[read_size] = '\0';
+		*save = ft_strjoin(&temp, &buffer, save);
+		if (!(*save))
 			return (0);
-		buffer[read_size] = 0;
-		temp = save;
-		save = ft_strjoin(temp, buffer);
-		if (!save)
-			return (0);
-		free(temp);
-		temp = 0;
+		free_str(&temp);
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
-	return (save);
+	return (*save);
+}
+
+static char	*sub_word(char *word, char **save)
+{
+	int		i;
+	char	*result;
+
+	i = 0;
+	while (word[i] && word[i] != '\n')
+		i++;
+	if (!(word[i]))
+		return (0);
+	result = ft_substr(word, i + 1, save, ft_strlen(word) - i);
+	if (!result)
+		return (free_str(&result));
+	if (!(result[0]))
+		return (free_str(&result));
+	word[i + 1] = '\0';
+	return (result);
 }
 
 char	*get_next_line(int fd)
 {
+	int			i;
+	int			read_size;
+	char		*word;
+	char		buffer[BUFFER_SIZE + 1];
 	static char	*save;
-	char		*buffer;
-	char		*result;
 
+	i = 0;
+	read_size = 1;
 	if (fd < 0 || !BUFFER_SIZE)
 		return (0);
-	buffer = (char *)malloc(sizeof(char) *(BUFFER_SIZE + 1));
-	if (!buffer)
-		return (0);
-	result = save_words(fd, buffer, save);
-	if (!result)
-		return (0);
-	free(buffer);
-	buffer = 0;
-	save = chk_word(save, result);
-	return (result);
+	word = save_word(fd, read_size, buffer, &save);
+	if (!word)
+		return (free_str(&save));
+	save = sub_word(word, &save);
+	return (word);
 }
