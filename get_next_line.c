@@ -6,7 +6,7 @@
 /*   By: seunghun <seunghun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:34:44 by seunghun          #+#    #+#             */
-/*   Updated: 2023/11/15 16:48:33 by seunghun         ###   ########.fr       */
+/*   Updated: 2023/11/17 16:38:20 by seunghun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*save_word(int fd, int read_size, char *buffer, char **save)
 		buffer[read_size] = '\0';
 		*save = ft_strjoin(&temp, &buffer, save);
 		if (!(*save))
-			return (0);
+			return (free_str(save));
 		free_str(&temp);
 		if (ft_strchr(buffer, '\n'))
 			break ;
