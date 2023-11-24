@@ -6,7 +6,7 @@
 /*   By: seunghun <seunghun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 13:34:44 by seunghun          #+#    #+#             */
-/*   Updated: 2023/11/15 16:47:24 by seunghun         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:06:37 by seunghun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,15 @@ static char	*save_word(int fd, int read_size, char *buffer, char **save)
 		else if (read_size == 0)
 			break ;
 		if (!(*save))
-			*save = ft_strdup("", save);
+		{
+			*save = (char *)malloc(sizeof(char) * 1);
+			if (!(*save))
+				return (0);
+			**save = 0;
+		}
 		temp = *save;
 		buffer[read_size] = '\0';
-		*save = ft_strjoin(&temp, &buffer, save);
-		if (!(*save))
-			return (0);
+		*save = ft_strjoin(&temp, &buffer);
 		free_str(&temp);
 		if (ft_strchr(buffer, '\n'))
 			break ;
@@ -55,9 +58,9 @@ static char	*save_word(int fd, int read_size, char *buffer, char **save)
 	return (*save);
 }
 
-static char	*sub_word(char *word, char **save)
+static char	*sub_word(char *word)
 {
-	int		i;
+	size_t	i;
 	char	*result;
 
 	i = 0;
@@ -65,9 +68,9 @@ static char	*sub_word(char *word, char **save)
 		i++;
 	if (!(word[i]))
 		return (0);
-	result = ft_substr(word, i + 1, save, ft_strlen(word) - i);
+	result = ft_substr(word, i + 1, ft_strlen(word) - i);
 	if (!result)
-		return (free_str(&result));
+		return (0);
 	if (!(result[0]))
 		return (free_str(&result));
 	word[i + 1] = '\0';
@@ -89,6 +92,6 @@ char	*get_next_line(int fd)
 	word = save_word(fd, read_size, buffer, &save[fd]);
 	if (!word)
 		return (free_str(save));
-	save[fd] = sub_word(word, save);
+	save[fd] = sub_word(word);
 	return (word);
 }
