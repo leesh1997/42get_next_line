@@ -6,7 +6,7 @@
 /*   By: seunghun <seunghun@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 16:31:51 by seunghun          #+#    #+#             */
-/*   Updated: 2023/11/24 15:16:06 by seunghun         ###   ########.fr       */
+/*   Updated: 2023/11/24 15:37:12 by seunghun         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <limits.h>
 
 # ifndef OPEN_MAX
 #  define OPEN_MAX 10240
